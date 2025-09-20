@@ -1351,7 +1351,7 @@ class BotGUI:
         # 원격 이미지(<img src="http(s)://...">)를 data URI로 인라인하여 tkinterweb 호환/표시율 개선
         try:
             urls = []
-            for mo in re.finditer(r"<img[^>]+src=['\"]([^'\"]+)['\"]", html, flags=re.IGNORECASE):
+            for mo in re.finditer(r"<img[^>]+src\s*=\s*['\"]([^'\"]+)['\"]", html, flags=re.IGNORECASE):
                 urls.append(mo.group(1))
             if not urls:
                 return html
@@ -1380,7 +1380,7 @@ class BotGUI:
                         mime = ct.split(';')[0] or 'image/png'
                         data_uri = f"data:{mime};base64,{b64}"
                         # src 속성 안의 해당 URL만 안전하게 치환
-                        pattern = re.compile(r"(<img[^>]+src=['\"])" + re.escape(u) + r"(['\"])", flags=re.IGNORECASE)
+                        pattern = re.compile(r"(<img[^>]+src\s*=\s*['\"])" + re.escape(u) + r"(['\"])", flags=re.IGNORECASE)
                         out = pattern.sub(r"\1" + data_uri + r"\2", out)
                         count += 1
                         if count >= max_images:
